@@ -57,9 +57,9 @@
 
   function fetchList(afterFetch) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
+    xhr.open('GET', './demo-list-notes.json', true);
     xhr.responseType = 'json';
-    xhr.onreadystatechange = function(e) {
+    xhr.onreadystatechange = (function(e) {
       // Watch out: we have a mysterious unknown 'this'.
       if (this.readyState === 4 && this.status === 200) {
         var listData = this.response;
@@ -68,7 +68,7 @@
       } else if (this.status !== 200 ){
         // Ignore error in this case.
       }
-    };
+    }).bind(xhr);
     xhr.send();
   }
 
