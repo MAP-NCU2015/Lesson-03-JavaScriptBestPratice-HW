@@ -1,44 +1,37 @@
 'use strict';
 
-(function() {
+(function(exports) {
 
+var ListManager = function() {
   var _listNoteContent = [];
-  var _wrapper = document.querySelector('#note-list-wrapper');
+  var _wrapper = null;
+};
 
-  function start() {
-    fetchList(function(data) {
-      updateList(data);
-      drawList();
-      preloadFirstNote();
-    });
-    window.addEventListener('click', function(event) {
-      onNoteOpen(event);
-    });
-  }
+ListManager.prototype = {
 
-  function onNoteOpen(event) {
+  onNoteOpen(event) {
     if (event.target.classList.contains('note-title')) {
       var id = event.target.dataset.noteId;
       var content = _listNoteContent[id];
       window.dispatchEvent(new CustomEvent('note-open',
         { detail: content }));
     };
-  }
+  },
 
-  function preloadFirstNote() {
-    if (_listNoteContent.length !== 0) {
-      var content = _listNoteContent[0];
+  preloadFirstNote() {
+    if (this._listNoteContent.length !== 0) {
+      var content = this._listNoteContent[0];
       window.dispatchEvent(new CustomEvent('note-open',
         { detail: content }));
     }
-  }
+  },
 
-  function updateList(list) {
-    _listNoteContent = list;
-  }
+  updateList(list) {
+    this._listNoteContent = list;
+  },
 
-  function drawList() {
-    var list = _listNoteContent;
+  drawList() {
+    var list = this._listNoteContent;
     var ul = document.createElement('ul');
     ul.id = 'note-title-list';
     var buff = document.createDocumentFragment();
@@ -52,10 +45,10 @@
       buff.appendChild(li);
     });
     ul.appendChild(buff);
-    _wrapper.appendChild(ul);
-  }
+    this._wrapper.appendChild(ul);
+  },
 
-  function fetchList(afterFetch) {
+  fetchList(afterFetch) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', './demo-list-notes.json', true);
     xhr.responseType = 'json';
@@ -70,10 +63,26 @@
       }
     }).bind(xhr);
     xhr.send();
+  },
+
+  handelEvent(event) {
+    switch(event.type) {
+      case 'click':
+        onNoteOpen(event);
+        break;
+    }
+  },
+
+  start() {
+    this._wrapper = document.querySelector('#note-list-wrapper');
+    this.fetchList((function(data) {
+      this.updateList(data);
+      this.drawList();
+      this.preloadFirstNote();
+    }).bind(this));
+    window.addEventListener('click', this);
   }
+};
 
-  document.addEventListener('DOMContentLoaded', function(event) {
-    start();
-  });
-
-})();
+exports.ListManager = ListManager;
+})(window);
