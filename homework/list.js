@@ -12,7 +12,7 @@ ListManager.prototype = {
   onNoteOpen(event) {
     if (event.target.classList.contains('note-title')) {
       var id = event.target.dataset.noteId;
-      var content = _listNoteContent[id];
+      var content = this._listNoteContent[id];
       window.dispatchEvent(new CustomEvent('note-open',
         { detail: content }));
     };
@@ -65,10 +65,10 @@ ListManager.prototype = {
     xhr.send();
   },
 
-  handelEvent(event) {
+  handleEvent(event) {
     switch(event.type) {
       case 'click':
-        onNoteOpen(event);
+        this.onNoteOpen(event);
         break;
     }
   },
