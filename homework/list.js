@@ -3,6 +3,7 @@
 (function() {
 
   var _listNoteContent = [];
+	// _wrapper : list container
   var _wrapper = document.querySelector('#note-list-wrapper');
 
   function start() {
@@ -11,11 +12,14 @@
       drawList();
       preloadFirstNote();
     });
+
+		// Register for each list by listening "click" event
     window.addEventListener('click', function(event) {
       onNoteOpen(event);
     });
   }
 
+	/** get elem's data and trigger "note-open" event to show it*/
   function onNoteOpen(event) {
     if (event.target.classList.contains('note-title')) {
       var id = event.target.dataset.noteId;
@@ -25,6 +29,7 @@
     };
   }
 
+	/** Show first note before any item been clicked */
   function preloadFirstNote() {
     if (_listNoteContent.length !== 0) {
       var content = _listNoteContent[0];
@@ -33,10 +38,12 @@
     }
   }
 
+	/** Hmm... */
   function updateList(list) {
     _listNoteContent = list;
   }
 
+	/** Append list into DOM */
   function drawList() {
     var list = _listNoteContent;
     var ul = document.createElement('ul');
@@ -55,6 +62,8 @@
     _wrapper.appendChild(ul);
   }
 
+	/** Send XHR to get demo-list.json,
+			and pass list into three functions called in start() */
   function fetchList(afterFetch) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
@@ -72,6 +81,7 @@
     xhr.send();
   }
 
+	/** Triggered while document has been load and parse without stylesheets and images */
   document.addEventListener('DOMContentLoaded', function(event) {
     start();
   });

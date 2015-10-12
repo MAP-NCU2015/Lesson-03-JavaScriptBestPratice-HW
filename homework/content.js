@@ -4,6 +4,7 @@
   var _wrapper = document.querySelector('#note-content-wrapper');
 
   function start() {
+		// 'note-open' will be triggered at list.js
     window.addEventListener('note-open', function(event) {
       var note = event.detail;
       resetWrapper();
@@ -11,10 +12,12 @@
     });
   }
 
+	/** Clear content container for the new one */
   function resetWrapper() {
     _wrapper.innerHTML = '';
   }
 
+	/** Append the new one */
   function drawNote(note) {
     var title = note.title;
     var h = document.createElement('h2');
@@ -31,6 +34,7 @@
     _wrapper.appendChild(buff);
   }
 
+	/** which start() will be executed first? */
   document.addEventListener('DOMContentLoaded', function(event) {
     start();
   });
