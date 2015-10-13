@@ -54,23 +54,28 @@
     * @return {Promise} A start point of the work flow.
     */
     fetchList() {
-      return new Promise((function (resolve, reject) {
+      return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', 'http://127.0.0.1:8080/demo-list-notes.json', true);
         xhr.responseType = 'json';
-        xhr.onreadystatechange = function (e) {
+        xhr.onreadystatechange = (function (e) {
           // Watch out: we have a mysterious unknown 'this'.
+
+          // Add bind xhr to specify or make code more clear. !?
           if (this.readyState === 4 && this.status === 200) {
             var listData = this.response;
             // The flow ends here.
             resolve(listData);
           } else if (this.status !== 200) {
             // Ignore error in this case.
-            reject("Fetch Error");
+            reject({
+              status: this.status,
+              statusText: this.statusText
+            });
           }
-        };
+        }).bind(xhr);
         xhr.send();
-      }).bind(this));
+      });
     },
 
     /**

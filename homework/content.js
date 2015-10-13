@@ -10,7 +10,7 @@
   */
   var ContentManager = function () {
     /**
-    * The content for.
+    * It contains the content of the note.
     *
     * @private 
     */
