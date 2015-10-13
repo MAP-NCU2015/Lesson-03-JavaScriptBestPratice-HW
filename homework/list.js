@@ -2,12 +2,26 @@
 
 (function(exports) {
 
+  /**
+  * Create a instance of the ListManager.
+  *
+  * @constructor
+  * @this {ListManager}
+  */
   var ListManager = function () {
-    this._listNoteContent = [];
-    this._wrapper = null;
+    /** @private */ this._listNoteContent = [];
+    /** @private */ this._wrapper = null;
   }
 
   ListManager.prototype = {
+
+    /**
+    * The public interface of the listManager.
+    * Fire events and do the what event describes. 
+    *
+    * @this {ListManager}
+    * @param {object} event The fired event.
+    */
     handleEvent(event){
       switch(event.type){
         case 'click':
@@ -16,6 +30,11 @@
       }
     },
 
+    /**
+    * Initialize the listManager.
+    *
+    * @this {ListManager}
+    */
     start() {
       this._wrapper = document.querySelector('#note-list-wrapper');
       this.fetchList()
@@ -28,6 +47,12 @@
       window.addEventListener('click', this);
     },
 
+    /**
+    * Fetch the note list from server.
+    * In this demo case, we fetch data from localhost.
+    *
+    * @return {Promise} A start point of the work flow.
+    */
     fetchList() {
       return new Promise((function (resolve, reject) {
         var xhr = new XMLHttpRequest();
@@ -48,6 +73,12 @@
       }).bind(this));
     },
 
+    /**
+    * When a note open, it will fire an 'note-open' event.
+    *
+    * @this {ListManager}
+    * @param {object} event The information such as event source, which is about event.
+    */
     onNoteOpen(event) {
       if (event.target.classList.contains('note-title')) {
         var id = event.target.dataset.noteId;
@@ -57,6 +88,12 @@
       };
     },
 
+    /**
+    * When the first glance(user has'n done any action), 
+    * fire a 'note-open' event to load the first note.
+    *
+    * @this {ListManager}
+    */
     preloadFirstNote() {
       if (this._listNoteContent.length !== 0) {
         var content = this._listNoteContent[0];
@@ -65,10 +102,20 @@
       }
     },
 
+    /**
+    * Update or set the note list.
+    *
+    * @this {ListManager}
+    */
     updateList(list) {
       this._listNoteContent = list;
     },
 
+    /**
+    * Draw the title of the note list.
+    *
+    * @this {ListManager}
+    */
     drawList() {
       var list = this._listNoteContent;
       var ul = document.createElement('ul');

@@ -2,16 +2,39 @@
 
 (function (exports) {
 
+  /**
+  * Create a instance of contentManager.
+  *
+  * @constructor
+  * @this {ContentManager}
+  */
   var ContentManager = function () {
+    /**
+    * The content for.
+    *
+    * @private 
+    */
     this._wrapper = null;
   }
 
   ContentManager.prototype = {
 
+   /**
+    * Reset the wrapper to empty.
+    * 
+    * @this {ContentManager}
+    */
     resetWrapper(){
       this._wrapper.innerHTML = '';
     },
 
+    /**
+    * The public interface of the contentManager.
+    * Fire events and do the what event describes. 
+    *
+    * @this {ContentManager}
+    * @param {object} event The fired event.
+    */
     handleEvent(event){
       switch (event.type) {
         case 'note-open':
@@ -22,11 +45,22 @@
       }
     },
 
+    /**
+    * Initialize the contentManager.
+    * 
+    * @this {ContentManager}
+    */
     start() {
       this._wrapper = document.querySelector('#note-content-wrapper');
       window.addEventListener('note-open', this);
     },
 
+    /**
+    * Display the content of the note.
+    *
+    * @this {ContentManager}
+    * @param {object} note The information about the note.
+    */
     drawNote(note) {
       var title = note.title;
       var h = document.createElement('h2');
