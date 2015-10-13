@@ -3,7 +3,7 @@
 (function (exports) {
 
   var ContentManager = function () {
-    this._wrapper = document.querySelector('#note-content-wrapper');
+    this._wrapper = null;
   }
 
   ContentManager.prototype = {
@@ -16,13 +16,14 @@
       switch (event.type) {
         case 'note-open':
           var note = event.detail;
-          this.resetWrapper();
-          this.drawNote(note);
+          this.resetWrapper.bind(this)();
+          this.drawNote.bind(this)(note);
           break;
       }
     },
 
     start() {
+      this._wrapper = document.querySelector('#note-content-wrapper');
       window.addEventListener('note-open', this);
     },
 

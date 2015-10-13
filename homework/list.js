@@ -4,43 +4,48 @@
 
   var ListManager = function () {
     this._listNoteContent = [];
-    this._wrapper = document.querySelector('#note-list-wrapper');
+    this._wrapper = null;
   }
 
   ListManager.prototype = {
-
     handleEvent(event){
       switch(event.type){
         case 'click':
-          this.onNoteOpen(event);
+          this.onNoteOpen.bind(this)(event);
           break;
       }
     },
 
-    start(){
-      this.fetchList((function (data) {
-        this.updateList(data);
-        this.drawList();
-        this.preloadFirstNote();
-      }).bind(this));
+    start() {
+      this._wrapper = document.querySelector('#note-list-wrapper');
+      this.fetchList()
+          .then(this.updateList.bind(this))
+          .then(this.drawList.bind(this))
+          .then(this.preloadFirstNote.bind(this))
+          .catch(function (error) {
+            console.log(error);
+          });
       window.addEventListener('click', this);
     },
 
-    fetchList(afterFetch) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'http://127.0.0.1:8080/demo-list-notes.json', true);
-      xhr.responseType = 'json';
-      xhr.onreadystatechange = function (e) {
-        // Watch out: we have a mysterious unknown 'this'.
-        if (this.readyState === 4 && this.status === 200) {
-          var listData = this.response;
-          // The flow ends here.
-          afterFetch(listData);
-        } else if (this.status !== 200) {
-          // Ignore error in this case.
-        }
-      };
-      xhr.send();
+    fetchList() {
+      return new Promise((function (resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://127.0.0.1:8080/demo-list-notes.json', true);
+        xhr.responseType = 'json';
+        xhr.onreadystatechange = function (e) {
+          // Watch out: we have a mysterious unknown 'this'.
+          if (this.readyState === 4 && this.status === 200) {
+            var listData = this.response;
+            // The flow ends here.
+            resolve(listData);
+          } else if (this.status !== 200) {
+            // Ignore error in this case.
+            reject("Fetch Error");
+          }
+        };
+        xhr.send();
+      }).bind(this));
     },
 
     onNoteOpen(event) {

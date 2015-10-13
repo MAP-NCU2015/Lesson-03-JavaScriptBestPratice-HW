@@ -2,7 +2,8 @@ describe('Test > ', function() {
   beforeEach(function() {
   });
 
-  it('will test some pure functions', function() {
+  it('My pure function', function() {
     // Write any pure function assertion here.
+    assert.
   });
 });
