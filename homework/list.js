@@ -1,12 +1,15 @@
 'use strict';
 
 (function(exports) {
-    var TodoListManager = {
-        _listNoteContent: [],
-        _wrapper: null,
+    var TodoListManager = function() {
+        this._listNoteContent = [];
+        this._wrapper = null;
+    };
 
-        drawList() {
-                var list = TodoListManager._listNoteContent;
+    TodoListManager.prototype = {
+
+			drawList() {
+                var list = this._listNoteContent;
                 var ul = document.createElement('ul');
                 ul.id = 'note-title-list';
                 var buff = document.createDocumentFragment();
@@ -20,13 +23,13 @@
                     buff.appendChild(li);
                 });
                 ul.appendChild(buff);
-                TodoListManager._wrapper.appendChild(ul);
+                this._wrapper.appendChild(ul);
             },
 
             onNoteOpen(event) {
                 if (event.target.classList.contains('note-title')) {
                     var id = event.target.dataset.noteId;
-                    var content = TodoListManager._listNoteContent[id];
+                    var content = this._listNoteContent[id];
                     window.dispatchEvent(new CustomEvent('note-open', {
                         detail: content
                     }));
@@ -34,15 +37,15 @@
             },
 
             preloadFirstNote() {
-                if (TodoListManager._listNoteContent.length !== 0) {
-                    var content = TodoListManager._listNoteContent[0];
+                if (this._listNoteContent.length !== 0) {
+                    var content = this._listNoteContent[0];
                     window.dispatchEvent(new CustomEvent('note-open', {
                         detail: content
                     }));
                 }
             },
             updateList(list) {
-                TodoListManager._listNoteContent = list;
+                this._listNoteContent = list;
             },
             fetchList(afterFetch) {
                 var xhr = new XMLHttpRequest();
@@ -62,18 +65,18 @@
                 xhr.send();
             },
 
-            init() {
-                TodoListManager._wrapper = document.querySelector('#note-list-wrapper')
-                TodoListManager.fetchList(function(data) {
-                    TodoListManager.updateList(data);
-                    TodoListManager.drawList();
-                    TodoListManager.preloadFirstNote();
-                });
-                window.addEventListener('click', function(event) {
-                    TodoListManager.onNoteOpen(event);
-                });
+            start() {
+                this._wrapper = document.querySelector('#note-list-wrapper')
+                this.fetchList((function(data) {
+                    this.updateList(data);
+                    this.drawList();
+                    this.preloadFirstNote();
+                }).bind(this));
+                window.addEventListener('click', (function(event) {
+                    this.onNoteOpen(event);
+                }).bind(this));
             }
-};
+    };
 
     exports.TodoListManager = TodoListManager;
 })(window);

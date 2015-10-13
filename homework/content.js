@@ -1,11 +1,14 @@
 'use strict';
 
 (function(exports) {
-    var TodoContentManager = {
-        _wrapper: null,
 
-        resetWrapper() {
-                TodoContentManager._wrapper.innerHTML = '';
+    var TodoContentManager = function() {
+        this._wrapper = null;
+    };
+
+    TodoContentManager.prototype = {
+			resetWrapper() {
+                this._wrapper.innerHTML = '';
             },
 
             drawNote(note) {
@@ -20,18 +23,20 @@
                     p.textContent = passage;
                     buff.appendChild(p);
                 });
-                TodoContentManager._wrapper.appendChild(h);
-                TodoContentManager._wrapper.appendChild(buff);
+                this._wrapper.appendChild(h);
+                this._wrapper.appendChild(buff);
             },
 
-            init() {
-                TodoContentManager._wrapper = document.querySelector('#note-content-wrapper');
-                window.addEventListener('note-open', function(event) {
+
+            start() {
+                this._wrapper = document.querySelector('#note-content-wrapper');
+                window.addEventListener('note-open', (function(event) {
                     var note = event.detail;
-                    TodoContentManager.resetWrapper();
-                    TodoContentManager.drawNote(note);
-                });
+                    this.resetWrapper();
+                    this.drawNote(note);
+                }).bind(this));
             }
-    };
+    }
+
     exports.TodoContentManager = TodoContentManager;
 })(window);

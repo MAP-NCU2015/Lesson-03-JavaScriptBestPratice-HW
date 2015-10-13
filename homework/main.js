@@ -1,4 +1,9 @@
+'use strict';
+
+  // Kick off
 document.addEventListener('DOMContentLoaded', function(event) {
-  TodoListManager.init();
-  TodoContentManager.init();
+  var todoListManager = new TodoListManager();
+  var todoContentManager = new TodoContentManager();
+  todoListManager.start();
+  todoContentManager.start();
 });
