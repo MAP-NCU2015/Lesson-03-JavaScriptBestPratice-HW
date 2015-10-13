@@ -1,6 +1,7 @@
 'use strict';
 
 (function() {
+	//Get the id=note-content-wrapper
   var _wrapper = document.querySelector('#note-content-wrapper');
 
   function start() {
@@ -31,6 +32,7 @@
     _wrapper.appendChild(buff);
   }
 
+	//先執行，當html載好後，執行後面的function。
   document.addEventListener('DOMContentLoaded', (function(event) {
     start();
   }).bind(this));
