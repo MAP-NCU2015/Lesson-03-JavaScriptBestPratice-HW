@@ -44,34 +44,38 @@
                     }));
                 }
             },
+			
             updateList(list) {
                 this._listNoteContent = list;
             },
+			
             fetchList(afterFetch) {
-                var xhr = new XMLHttpRequest();
-                //xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
-                xhr.open('GET', 'demo-list-notes.json', true);
-                xhr.responseType = 'json';
-                xhr.onreadystatechange = function(e) {
-                    // Watch out: we have a mysterious unknown 'this'.
-                    if (this.readyState === 4 && this.status === 200) {
-                        var listData = this.response;
-                        // The flow ends here.
-                        afterFetch(listData);
-                    } else if (this.status !== 200) {
-                        // Ignore error in this case.
-                    }
-                };
-                xhr.send();
+                return new Promise((function(resolve, reject) {
+                    var xhr = new XMLHttpRequest();
+                    //xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
+                    xhr.open('GET', 'demo-list-notes.json', true);
+                    xhr.responseType = 'json';
+                    xhr.onreadystatechange = function(e) {
+                        // Watch out: we have a mysterious unknown 'this'.
+                        if (this.readyState === 4 && this.status === 200) {
+                            var listData = this.response;
+                            resolve(listData);
+                        } else if (this.status !== 200) {
+                            reject('FETCHING FAILED: ' + this.status + ' ' + this.readyState);
+                        }
+                    };
+                    xhr.send();
+                }).bind(this));
             },
 
             start() {
                 this._wrapper = document.querySelector('#note-list-wrapper')
-                this.fetchList((function(data) {
-                    this.updateList(data);
-                    this.drawList();
-                    this.preloadFirstNote();
-                }).bind(this));
+                this.fetchList()
+                    .then((function(data) {
+                        this.updateList(data);
+                        this.drawList();
+                        this.preloadFirstNote();
+                    }).bind(this));
                 window.addEventListener('click', (function(event) {
                     this.onNoteOpen(event);
                 }).bind(this));

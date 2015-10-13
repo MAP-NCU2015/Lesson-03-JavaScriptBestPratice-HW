@@ -27,7 +27,6 @@
                 this._wrapper.appendChild(buff);
             },
 
-
             start() {
                 this._wrapper = document.querySelector('#note-content-wrapper');
                 window.addEventListener('note-open', (function(event) {
