@@ -2,12 +2,25 @@
 
 (function(exports) {
 
+  /**
+  * Creates an instance of ListManager.
+  *
+  * @constructor
+  * @this {ListManager}
+  */
   var ListManager = function () {
     this._listNoteContent = [];
     this._wrapper = document.querySelector('#note-list-wrapper');
   }
 
   ListManager.prototype = {
+
+    /**
+    * Fetch remote data to render list and
+    * bind 'click' event to initialize the ListManager.
+    *
+    * @this {ListManager}
+    */
     start() {
       this.fetchList()
       .then((function(data) {
@@ -24,6 +37,12 @@
       }).bind(this));
     },
 
+    /**
+    * Dispatch a 'note-open' event if event target has 'note-title' in its classList.
+    *
+    * @param {CustomEvent} event Its target may have 'note-title' in classList.
+    * @this {ListManager}
+    */
     onNoteOpen(event) {
       if (event.target.classList.contains('note-title')) {
         var id = event.target.dataset.noteId;
@@ -33,6 +52,11 @@
       };
     },
 
+    /**
+    * Dispatch a 'note-open' event with first note if note list is not empty
+    *
+    * @this {ListManager}
+    */
     preloadFirstNote() {
       if (this._listNoteContent.length !== 0) {
         var content = this._listNoteContent[0];
@@ -41,10 +65,21 @@
       }
     },
 
+    /**
+    * Set the note list.
+    *
+    * @param {Array} list Notes.
+    * @this {ListManager}
+    */
     updateList(list) {
       this._listNoteContent = list;
     },
 
+    /**
+    * Render note list to '#note-list-wrapper'.
+    *
+    * @this {ListManager}
+    */
     drawList() {
       var list = this._listNoteContent;
       var ul = document.createElement('ul');
@@ -63,6 +98,12 @@
       this._wrapper.appendChild(ul);
     },
 
+    /**
+    * Fetch remote data of note list.
+    *
+    * @this {ListManager}
+    * @return {Promise} The ajax handler
+    */
     fetchList() {
       return new Promise(function( resolve, reject ) {
         var xhr = new XMLHttpRequest();
