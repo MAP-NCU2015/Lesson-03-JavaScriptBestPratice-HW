@@ -33,6 +33,10 @@
       });
       this._wrapper.appendChild(h);
       this._wrapper.appendChild(buff);
+    },
+
+    calculateMaxNumber(a, b) {
+      return Math.max(a, b);
     }
   }
 
