@@ -48,21 +48,23 @@ ListManager.prototype = {
     this._wrapper.appendChild(ul);
   },
 
-  fetchList(afterFetch) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', './demo-list-notes.json', true);
-    xhr.responseType = 'json';
-    xhr.onreadystatechange = (function(e) {
-      // Watch out: we have a mysterious unknown 'this'.
-      if (this.readyState === 4 && this.status === 200) {
-        var listData = this.response;
-        // The flow ends here.
-        afterFetch(listData);
-      } else if (this.status !== 200 ){
-        // Ignore error in this case.
-      }
-    }).bind(xhr);
-    xhr.send();
+  fetchList(url) {
+    return new Promise(function(reslove, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'json';
+      xhr.onreadystatechange = (function(e) {
+        // Watch out: we have a mysterious unknown 'this'.
+        if (this.readyState === 4 && this.status === 200) {
+          var listData = this.response;
+          // The flow ends here.
+          reslove(listData);
+        } else if (this.status !== 200 ){
+          reject(new Error('FETCHING FAILED: ' + this.status + ' ' + this.readyState));
+        }
+      }).bind(xhr);
+      xhr.send();
+    });
   },
 
   handleEvent(event) {
@@ -75,11 +77,13 @@ ListManager.prototype = {
 
   start() {
     this._wrapper = document.querySelector('#note-list-wrapper');
-    this.fetchList((function(data) {
-      this.updateList(data);
+    this.fetchList('./demo-list-notes.json').then((function(response) {
+      this.updateList(response);
       this.drawList();
       this.preloadFirstNote();
-    }).bind(this));
+    }).bind(this)).catch(function(error){
+      console.error(error);
+    });
     window.addEventListener('click', this);
   }
 };
