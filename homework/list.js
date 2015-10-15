@@ -80,6 +80,7 @@
                     this.onNoteOpen(event);
                 }).bind(this));
             }
+			
     };
 
     exports.TodoListManager = TodoListManager;
