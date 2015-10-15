@@ -11,21 +11,30 @@ List.prototype.start = function() {
 	window.addEventListener('click', this.onNoteOpen.bind(this));
 }
 
+/** Need to use Promise*/
 List.prototype.fetchList = function(afterFetch) {
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', 'http://140.115.50.54:8000/demo-list-notes.json', true); // Note: use public IP
-	xhr.responseType = 'json';
-	xhr.onreadystatechange = function(e) {
-		// Watch out: we have a mysterious unknown 'this'.
-		if (this.readyState === 4 && this.status === 200) {
-			var listData = this.response;
-			// The flow ends here.
-			afterFetch(listData);
-		} else if (this.status !== 200 ){
-			// Ignore error in this case.
-		}
-	};
-	xhr.send();
+	var url = 'http://140.115.50.54:8000/demo-list-notes.json';
+	sendXHR(url).then( function onFulfilled(value) {
+		afterFetch(value);
+	}).catch( function onRejected(error) {
+		console.error(error);
+	})
+}
+
+function sendXHR(url) {
+	return  new Promise(function(resolve, reject) {
+		var req = new XMLHttpRequest();
+		req.open('GET', url, true);
+		req.responseType = 'json';
+		req.onload = function () {
+			if (req.status === 200 )
+				resolve(req.response);
+		};
+		req.onerror = function () {
+			reject( new Error(req.statusText));
+		};
+		req.send();
+	});
 }
 
 List.prototype.afterFetch = function(data) {
@@ -43,15 +52,7 @@ List.prototype.drawList = function() {
 	var ul = document.createElement('ul');
 	ul.id = 'note-title-list';
 	var buff = document.createDocumentFragment();
-	list.forEach(function(note, i) {
-		var li = document.createElement('li');
-		li.dataset.noteId = i;
-		li.classList.add('note-title');
-		li.textContent = note.title;
-		// Note: buff is captured, so we now have a
-		// little closure naturally.
-		buff.appendChild(li);
-	});
+	list.forEach(insertItem.bind(buff));
 	ul.appendChild(buff);
 	this._wrapper.appendChild(ul);
 }
@@ -72,4 +73,13 @@ List.prototype.onNoteOpen = function(event) {
 			{ detail: content }));
 	};
 }
+
+function insertItem(element, index) {
+	var li = document.createElement('li');
+	li.dataset.noteId = index;
+	li.classList.add('note-title');
+	li.textContent = element.title;
+	this.appendChild(li);
+}
+
 var list = new List();
