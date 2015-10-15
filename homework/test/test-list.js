@@ -3,6 +3,10 @@ describe('Test > ', function() {
   });
 
   it('will test some pure functions', function() {
-    // Write any pure function assertion here.
+   var a = 5;
+   var b = 6;
+   var result = a + b;
+	assert( result == 11, 'Checking the add function'); 
+
   });
 });
