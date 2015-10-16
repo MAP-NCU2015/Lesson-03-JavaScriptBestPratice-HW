@@ -37,4 +37,3 @@ Note.prototype.drawNote = function(note) {
 }
 
 var note = new Note();
-module.exports = Note;
