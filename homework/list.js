@@ -7,10 +7,12 @@
   }
 
   ListManager.prototype.start = function(){
-      this.fetchList((function(data) {
+      this.fetchList().then((function(data) {
         this.updateList(data);
         this.drawList();
         this.preloadFirstNote();
+      }).bind(this)).catch((function () {
+        // Deal with fetch error
       }).bind(this));
       window.addEventListener('click', (function(event) {
         this.onNoteOpen(event);
@@ -56,21 +58,24 @@
     this._wrapper.appendChild(ul);
   },
 
-  ListManager.prototype.fetchList = function(afterFetch) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
-    xhr.responseType = 'json';
-    xhr.onreadystatechange = (function(e) {
-      // Watch out: we have a mysterious unknown 'this'.
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        var listData = xhr.response;
-        // The flow ends here.
-        afterFetch(listData);
-      } else if (xhr.status !== 200 ){
-        // Ignore error in this case.
-      }
-    }).bind(this);
-    xhr.send();
+  ListManager.prototype.fetchList = function() {
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
+      xhr.responseType = 'json';
+      xhr.onreadystatechange = (function(e) {
+        // Watch out: we have a mysterious unknown 'this'.
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var listData = xhr.response;
+          // The flow ends here.
+          resolve(listData);
+        } else if (xhr.status !== 200 ){
+          // Ignore error in this case.
+          reject(xhr);
+        }
+      }).bind(this);
+      xhr.send();
+    });
   }
 
   exports.ListManager = ListManager;
