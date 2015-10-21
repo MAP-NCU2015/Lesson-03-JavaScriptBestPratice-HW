@@ -9,7 +9,7 @@
   list.prototype = {
     start() {
       this._wrapper = document.querySelector('#note-list-wrapper');
-      this.fetchList((function(data) {
+      this.fetchList().then((function(data) {
         this.updateList(data);
         this.drawList();
         this.preloadFirstNote();
@@ -59,7 +59,7 @@
     fetchList(afterFetch) {
       return new Promise((function(resolve, reject) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/demo-list-notes.json', true);
+        xhr.open('GET', 'demo-list-notes.json', true);
         xhr.responseType = 'json';
         xhr.onreadystatechange = function(e) {
           // Watch out: we have a mysterious unknown 'this'.
