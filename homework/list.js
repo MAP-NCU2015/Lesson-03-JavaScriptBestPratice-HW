@@ -47,34 +47,37 @@ ListManager.prototype = {
     this._wrapper.appendChild(ul);
   },
 
-  fetchList(afterFetch) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
-    xhr.responseType = 'json';
-    xhr.onreadystatechange = (function(e) {
-      // Watch out: we have a mysterious unknown 'this'.
-      if (this.readyState === 4 && this.status === 200) {
-        var listData = this.response;
-        // The flow ends here.
-        afterFetch(listData);
-      } else if (this.status !== 200 ){
-        // Ignore error in this case.
-      }
-    }).bind(this);
+  fetchList() {
+    return new Promise(function(resolve, reject) {
+		var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
+        xhr.responseType = 'json';
+        xhr.onreadystatechange = (function(e) {
+          // Watch out: we have a mysterious unknown 'this'.
+          if (this.readyState === 4 && this.status === 200) {
+            var listData = this.response;
+            // The flow ends here.
+            afterFetch(listData);
+          } else if (this.status !== 200 ){
+            // Ignore error in this case.
+          }
+    };
     xhr.send();
+  });
   },
   
   start() {
-    fetchList((function(data) {
-      updateList(data);
-      drawList();
-      preloadFirstNote();
-    }).bind(this));
-    window.addEventListener('click', (function(event) {
-      onNoteOpen(event);
-    }).bind(this));
-	window.addEventListener('click', this);
-  }
+      this.fetchList().then((function(data){
+        this.updateList(data);
+        this.drawList();
+        this.preloadFirstNote();
+      }).bind(this)).catch((function() {
+
+      }).bind(this));
+      window.addEventListener('click', (function(event) {
+        this.onNoteOpen(event);
+      }).bind(this));
+    }
 };
 
  exports.ListManager = ListManager;
