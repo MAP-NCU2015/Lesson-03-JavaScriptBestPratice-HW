@@ -13,11 +13,11 @@
       }).bind(this));
   }
 
-  function resetWrapper() {
+  con.prototype.function resetWrapper = function() {
     _wrapper.innerHTML = '';
   }
 
-  function drawNote(note) {
+  con.prototype.function drawNote = function(note) {
     var title = note.title;
     var h = document.createElement('h2');
     h.textContent = title;
