@@ -3,7 +3,7 @@
 (function (exports) {
     var TodoListManager = function () {
         // Local data storage; should sync up with the server.
-        this._listTodoItem = [];
+        this._listNoteContent = [];
         // Will be an element as the list wrapper.
         this._wrapper = null;
     };
