@@ -1,8 +1,10 @@
 'use strict';
 
-(function() {
-  var _wrapper = document.querySelector('#note-content-wrapper');
-
+(function(exports) {                                 //exports是自己命名的 其實就是window
+  var ListContentManager = function(){
+    this._wrapper = null
+  });
+ 
   function start() {
     window.addEventListener('note-open', function(event) {
       var note = event.detail;
@@ -31,7 +33,5 @@
     _wrapper.appendChild(buff);
   }
 
-  document.addEventListener('DOMContentLoaded', function(event) {
-    start();
-  });
-})();
+    exports.ListContentManager = ListContentManager;
+})(window);//這裡的window就是exports要引入的東西
