@@ -25,7 +25,7 @@
     handleEvent(event){
       switch(event.type){
         case 'click':
-          this.onNoteOpen.bind(this)(event);
+          this.onNoteOpen(event);
           break;
       }
     },

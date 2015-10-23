@@ -39,8 +39,8 @@
       switch (event.type) {
         case 'note-open':
           var note = event.detail;
-          this.resetWrapper.bind(this)();
-          this.drawNote.bind(this)(note);
+          this.resetWrapper();
+          this.drawNote(note);
           break;
       }
     },
