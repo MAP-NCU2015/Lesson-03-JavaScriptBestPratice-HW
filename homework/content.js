@@ -1,21 +1,24 @@
 'use strict';
 
+
 (function() {
-  var _wrapper = document.querySelector('#note-content-wrapper');
+	function contentObject() {
+			this._wrapper = document.querySelector('#note-content-wrapper');
+	}
 
-  function start() {
+  contentObject.prototype.start = function() {
     window.addEventListener('note-open', function(event) {
-      var note = event.detail;
-      resetWrapper();
-      drawNote(note);
-    });
+      var note = event.detail;      
+      this.resetWrapper();
+      this.drawNote(note);
+    }.bind(this));
   }
 
-  function resetWrapper() {
-    _wrapper.innerHTML = '';
+  contentObject.prototype.resetWrapper = function() {
+    this._wrapper.innerHTML = '';
   }
 
-  function drawNote(note) {
+  contentObject.prototype.drawNote = function(note) {
     var title = note.title;
     var h = document.createElement('h2');
     h.textContent = title;
@@ -27,11 +30,12 @@
       p.textContent = passage;
       buff.appendChild(p);
     });
-    _wrapper.appendChild(h);
-    _wrapper.appendChild(buff);
+    this._wrapper.appendChild(h);
+    this._wrapper.appendChild(buff);
   }
 
   document.addEventListener('DOMContentLoaded', function(event) {
-    start();
+    var cObject = new contentObject();
+    cObject.start();
   });
 })();
