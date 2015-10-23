@@ -8,8 +8,8 @@
         start() {
             window.addEventListener('note-open', function (event) {
                 var note = event.detail;
-                resetWrapper();
-                drawNote(note);
+                this.resetWrapper();
+                this.drawNote(note);
             });
             this._wrapper = document.querySelector('#note-content-wrapper');
         },

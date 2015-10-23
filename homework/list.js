@@ -9,7 +9,7 @@
     };
     TodoListManager.prototype = {
         start() {
-            fetchList(function(data) {
+            this.fetchList(function(data) {
                 updateList(data);
                 drawList();
                 preloadFirstNote();
