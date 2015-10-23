@@ -72,4 +72,4 @@
         }
     };
     exports.TodoListManager = TodoListManager;
-})(Window);
+})(window);
