@@ -3,7 +3,7 @@
 // Kick off
 document.addEventListener('DOMContentLoaded', function (event) {
     var todoListManager = new TodoListManager();
-    var todoInputManager = new TodoContentManager();
+    var todoContentManager = new TodoContentManager();
     todoListManager.start();
-    TodoContentManager.start();
+    todoContentManager.start();
 });
