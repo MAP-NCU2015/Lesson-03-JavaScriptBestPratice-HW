@@ -32,5 +32,5 @@
             _wrapper.appendChild(buff);
         }
     };
-    exports.TodoListManager = TodoListManager;
+    exports.TodoContentManager = TodoContentManager;
 })(window);
