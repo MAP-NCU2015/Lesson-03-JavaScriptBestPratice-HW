@@ -10,18 +10,12 @@
     TodoListManager.prototype = { //its prototype
 
         start() {
-             new Promise(function (resolve) {
-                 this.fetchList(function(data){
+                 this.fetchList().then(function(data) {
                      this.updateList(data);
                      this.drawList();
-                     this.preloadFirstNote(); 
+                     this.preloadFirstNote();
                  }.bind(this));
-                 resolve();
-                }.bind(this)).then(function () {
-                    window.addEventListener('click', this);
-                }.bind(this)).catch(function (error) {
-                    console.log(error);
-                });
+                 window.addEventListener('click', this);
         },
 
         onNoteOpen(event) {
@@ -63,7 +57,8 @@
             this._wrapper.appendChild(ul);
         },
 
-        fetchList(afterFetch) {
+        fetchList() {
+            return new Promise((function(resolve) {
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
                 xhr.responseType = 'json';
@@ -73,12 +68,14 @@
                     if (this.readyState === 4 && this.status === 200) {
                         var listData = this.response;
                         // The flow ends here.
-                        afterFetch(listData);
-                    } else if (this.status !== 200 ){
+                        //afterFetch();
+                        resolve(listData);
+                    } else if (this.status !== 200 ) {
                         // Ignore error in this case.
                     }
                 };
                 xhr.send();
+            }).bind(this));
         },
 
         handleEvent(event) {
