@@ -1,6 +1,6 @@
 'use strict';
 
-(function(exports) {
+(function (exports) {
     var TodoListManager = function () {
         // Local data storage; should sync up with the server.
         this._listTodoItem = [];
@@ -9,12 +9,12 @@
     };
     TodoListManager.prototype = {
         start() {
-            this.fetchList(function(data) {
-                updateList(data);
-                drawList();
-                preloadFirstNote();
+            this.fetchList(function (data) {
+                this.updateList(data);
+                this.drawList();
+                this.preloadFirstNote();
             });
-            window.addEventListener('click', function(event) {
+            window.addEventListener('click', function (event) {
                 onNoteOpen(event);
             });
             this._wrapper = document.querySelector('#note-list-wrapper');
@@ -42,7 +42,7 @@
             var ul = document.createElement('ul');
             ul.id = 'note-title-list';
             var buff = document.createDocumentFragment();
-            list.forEach(function(note, i) {
+            list.forEach(function (note, i) {
                 var li = document.createElement('li');
                 li.dataset.noteId = i;
                 li.classList.add('note-title');
@@ -58,13 +58,13 @@
             var xhr = new XMLHttpRequest();
             xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
             xhr.responseType = 'json';
-            xhr.onreadystatechange = function(e) {
+            xhr.onreadystatechange = function (e) {
                 // Watch out: we have a mysterious unknown 'this'.
                 if (this.readyState === 4 && this.status === 200) {
                     var listData = this.response;
                     // The flow ends here.
                     afterFetch(listData);
-                } else if (this.status !== 200 ){
+                } else if (this.status !== 200) {
                     // Ignore error in this case.
                 }
             };
