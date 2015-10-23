@@ -1,6 +1,6 @@
 '+'use strict';
 
- // Kick off
+ // kick off
 document.addEventListener('DOMContentLoaded', function(event) {
   var listNote = new ListNote();
   var contentManager = new ContentManager();
