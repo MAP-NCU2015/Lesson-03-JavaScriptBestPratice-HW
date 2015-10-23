@@ -35,7 +35,7 @@
             }
         },
         updateList(list) {
-            _listNoteContent = list;
+            this._listNoteContent = list;
         },
         drawList() {
             var list = _listNoteContent;
