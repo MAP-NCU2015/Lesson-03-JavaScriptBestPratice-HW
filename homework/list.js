@@ -16,7 +16,7 @@
             }.bind(this));
             window.addEventListener('click', function (event) {
                 this.onNoteOpen(event);
-            });
+            }.bind(this));
             this._wrapper = document.querySelector('#note-list-wrapper');
         },
         onNoteOpen(event) {
@@ -29,7 +29,7 @@
         },
         preloadFirstNote() {
             if (this._listNoteContent.length !== 0) {
-                var content = _listNoteContent[0];
+                var content = this._listNoteContent[0];
                 window.dispatchEvent(new CustomEvent('note-open',
                   { detail: content }));
             }
