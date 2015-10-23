@@ -10,21 +10,15 @@
   listObject.prototype.start = function() {
 
     this.fetchList()
-    .then(function (data) {
-    	this.updateList(data);
-    	}.bind(this))
+    .then(this.updateList.bind(this))
     .then(this.drawList.bind(this))
-    	.then(function () {
-      this.drawList();
-   }.bind(this))
-   .then(function () {
-      this.preloadFirstNote();
-   }.bind(this));
-    //}.bind(this)
+    
+    .then(this.preloadFirstNote.bind(this));
+   
     
     window.addEventListener('click', function(event) {
       this.onNoteOpen(event);
-    });
+    }.bind(this));
   }
 
   listObject.prototype.onNoteOpen = function(event) {

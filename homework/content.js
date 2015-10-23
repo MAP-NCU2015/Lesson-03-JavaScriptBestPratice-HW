@@ -35,7 +35,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function(event) {
-    var start = new contentObject();
-    start.start();
+    var cObject = new contentObject();
+    cObject.start();
   });
 })();
