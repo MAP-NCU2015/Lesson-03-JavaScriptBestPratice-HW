@@ -70,6 +70,6 @@
             };
             xhr.send();
         }
-    }
+    };
     exports.TodoListManager = TodoListManager;
 })(Window);

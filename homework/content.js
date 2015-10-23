@@ -30,7 +30,7 @@
             });
             _wrapper.appendChild(h);
             _wrapper.appendChild(buff);
-        },
-    }
+        }
+    };
     exports.TodoListManager = TodoListManager;
 })(window);
