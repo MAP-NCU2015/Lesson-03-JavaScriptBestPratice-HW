@@ -1,6 +1,6 @@
 'use strict';
 
-(function(export) {
+(function(exports) {
     var TodoListManager = function () {
         // Local data storage; should sync up with the server.
         this._listTodoItem = [];
