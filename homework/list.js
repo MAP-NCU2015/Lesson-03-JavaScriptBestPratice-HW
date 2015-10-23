@@ -13,7 +13,7 @@
                 this.updateList(data);
                 this.drawList();
                 this.preloadFirstNote();
-            });
+            }.bind(this));
             window.addEventListener('click', function (event) {
                 onNoteOpen(event);
             });
