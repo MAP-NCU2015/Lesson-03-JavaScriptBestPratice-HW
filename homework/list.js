@@ -49,7 +49,7 @@ ListManager.prototype = {
   },
 
   fetchList(url) {
-    return new Promise(function(reslove, reject) {
+    return new Promise(function(resolve, reject) {
       var xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
       xhr.responseType = 'json';
@@ -58,7 +58,7 @@ ListManager.prototype = {
         if (this.readyState === 4 && this.status === 200) {
           var listData = this.response;
           // The flow ends here.
-          reslove(listData);
+          resolve(listData);
         } else if (this.status !== 200 ){
           reject(new Error('FETCHING FAILED: ' + this.status + ' ' + this.readyState));
         }
