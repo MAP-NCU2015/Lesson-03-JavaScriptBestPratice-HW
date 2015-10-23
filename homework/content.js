@@ -14,7 +14,7 @@
             this._wrapper = document.querySelector('#note-content-wrapper');
         },
         resetWrapper() {
-            _wrapper.innerHTML = '';
+            this._wrapper.innerHTML = '';
         },
         drawNote(note) {
             var title = note.title;
@@ -28,8 +28,8 @@
                 p.textContent = passage;
                 buff.appendChild(p);
             });
-            _wrapper.appendChild(h);
-            _wrapper.appendChild(buff);
+            this._wrapper.appendChild(h);
+            this._wrapper.appendChild(buff);
         }
     };
     exports.TodoContentManager = TodoContentManager;

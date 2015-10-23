@@ -15,7 +15,7 @@
                 this.preloadFirstNote();
             }.bind(this));
             window.addEventListener('click', function (event) {
-                onNoteOpen(event);
+                this.onNoteOpen(event);
             });
             this._wrapper = document.querySelector('#note-list-wrapper');
         },
@@ -28,7 +28,7 @@
             };
         },
         preloadFirstNote() {
-            if (_listNoteContent.length !== 0) {
+            if (this._listNoteContent.length !== 0) {
                 var content = _listNoteContent[0];
                 window.dispatchEvent(new CustomEvent('note-open',
                   { detail: content }));
@@ -38,7 +38,7 @@
             this._listNoteContent = list;
         },
         drawList() {
-            var list = _listNoteContent;
+            var list = this._listNoteContent;
             var ul = document.createElement('ul');
             ul.id = 'note-title-list';
             var buff = document.createDocumentFragment();
@@ -52,7 +52,7 @@
                 buff.appendChild(li);
             });
             ul.appendChild(buff);
-            _wrapper.appendChild(ul);
+            this._wrapper.appendChild(ul);
         },
         fetchList(afterFetch) {
             var xhr = new XMLHttpRequest();
