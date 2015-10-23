@@ -6,6 +6,8 @@
 *.swp
 *.swn
 *.swo
+*.sln
+*.config
 .svn
 *~
 node_modules/
