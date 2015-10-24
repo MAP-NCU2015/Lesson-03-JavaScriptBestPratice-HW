@@ -6,12 +6,17 @@
     }
     TodoContentManager.prototype = {
         start() {
-            window.addEventListener('note-open', function (event) {
-                var note = event.detail;
-                this.resetWrapper();
-                this.drawNote(note);
-            });
+            window.addEventListener('note-open', this);
             this._wrapper = document.querySelector('#note-content-wrapper');
+        },
+        handleEvent(event) {
+            switch (event.type) {
+                case 'note-open':
+                    var note = event.detail;
+                    this.resetWrapper();
+                    this.drawNote(note);
+                    break;
+            }
         },
         resetWrapper() {
             this._wrapper.innerHTML = '';
