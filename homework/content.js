@@ -8,7 +8,7 @@
       var note = event.detail;
       resetWrapper();
       drawNote(note);
-    });
+    }).bind(this);
   }
 
   function resetWrapper() {
@@ -33,5 +33,5 @@
 
   document.addEventListener('DOMContentLoaded', function(event) {
     start();
-  });
+  }).bind(this);
 })();
