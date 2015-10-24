@@ -1,40 +1,47 @@
 'use strict';
 
-(function() {
+//the way of how to refactor list.js is the same as content.js 
 
-  var _listNoteContent = [];
-  var _wrapper = document.querySelector('#note-list-wrapper');
 
-  function start() {
-    fetchList((function(data) {
-      updateList(data);
-      drawList();
-      preloadFirstNote();
+(function(exports) {
+
+  var ListManager = function(){
+    this._listNoteContent = [];
+    this._wrapper = document.querySelector("#note-content-wrapper");
+  }
+
+  ListManager.prototype = {
+    start() {
+      this.fetchList((function(data) {
+      this.updateList(data);
+      this.drawList();
+      this.preloadFirstNote();
     }).bind(this));
+    
     window.addEventListener('click', (function(event) {
-      onNoteOpen(event).bind(this));
+      this.onNoteOpen(event).bind(this));
     });
   }
 
-  function onNoteOpen(event) {
-    if (event.target.classList.contains('note-title')) {
+    onNoteOpen(event) {
+      if (event.target.classList.contains('note-title')) {
       var id = event.target.dataset.noteId;
       var content = _listNoteContent[id];
       window.dispatchEvent(new CustomEvent('note-open',
         { detail: content }));
-    };
-  }
-
-  function preloadFirstNote() {
-    if (_listNoteContent.length !== 0) {
-      var content = _listNoteContent[0];
-      window.dispatchEvent(new CustomEvent('note-open',
-        { detail: content }));
+      };
     }
-  }
 
-  function updateList(list) {
-    _listNoteContent = list;
+    preloadFirstNote() {
+      if (_listNoteContent.length !== 0) {
+        var content = _listNoteContent[0];
+        window.dispatchEvent(new CustomEvent('note-open',
+        { detail: content }));
+      }
+    }
+
+  updateList(list) {
+   this. _listNoteContent = list;
   }
 
   function drawList() {
@@ -52,7 +59,7 @@
       buff.appendChild(li);
     });
     ul.appendChild(buff);
-    _wrapper.appendChild(ul);
+    this._wrapper.appendChild(ul);
   }
 
   function fetchList(afterFetch) {
@@ -71,9 +78,6 @@
     }).bind(xhr);
     xhr.send();
   }
-
-  document.addEventListener('DOMContentLoaded', (function(event) {
-    start();
-  }).bind(this));
-
-})();
+}
+exports.ListManager = ListManager;
+})(window);
