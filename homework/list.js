@@ -1,7 +1,8 @@
 'use strict';
 
 //the way of how to refactor list.js is the same as content.js 
-
+//repair some error in list.js
+// add promise into it
 
 (function(exports) {
 
@@ -12,10 +13,12 @@
 
   ListManager.prototype = {
     start() {
-      this.fetchList((function(data) {
+      this.fetchList().then((function(data) {
       this.updateList(data);
       this.drawList();
       this.preloadFirstNote();
+    }).bind(this))
+    .catch((function () {
     }).bind(this));
     
     window.addEventListener('click', (function(event) {
@@ -44,7 +47,7 @@
    this. _listNoteContent = list;
   }
 
-  function drawList() {
+  drawList() {
     var list = _listNoteContent;
     var ul = document.createElement('ul');
     ul.id = 'note-title-list';
@@ -62,21 +65,22 @@
     this._wrapper.appendChild(ul);
   }
 
-  function fetchList(afterFetch) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
-    xhr.responseType = 'json';
-    xhr.onreadystatechange = (function(e) {
+  fetchList(afterFetch) {
+    return new Promise(function(resolve,reject){
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
+      xhr.responseType = 'json';
+      xhr.onreadystatechange = (function(e) {
       // Watch out: we have a mysterious unknown 'this'.
       if (this.readyState === 4 && this.status === 200) {
         var listData = this.response;
-        // The flow ends here.
-        afterFetch(listData);
+        resolve(listData)
       } else if (this.status !== 200 ){
-        // Ignore error in this case.
+          reject('ERROR');
       }
-    }).bind(xhr);
-    xhr.send();
+      }).bind(xhr);
+      xhr.send();   
+    });
   }
 }
 exports.ListManager = ListManager;
