@@ -7,7 +7,7 @@ describe('Test Math.sin', function() {
 
   it('will test sin function', function() {
     subject.set(Math.PI);
-	assertEqual(subject.sin(),0,"pass!!");
+	assertEqual(subject.sin(),0);
 	done();
   });
 });
