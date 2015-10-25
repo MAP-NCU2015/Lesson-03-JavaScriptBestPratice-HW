@@ -78,5 +78,9 @@
     });
   }
 
+  ListManager.prototype.getFahrenheit = function (celsius) {
+    return celsius * 1.8000 + 32.0000;
+  }
+
   exports.ListManager = ListManager;
 })(window);
