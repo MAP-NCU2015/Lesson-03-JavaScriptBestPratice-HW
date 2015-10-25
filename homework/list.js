@@ -1,12 +1,20 @@
 'use strict';
 (function(exports) {
+
+  /**
+  * Create a instance of the ListManager.
+  *
+  * @constructor
+  */
 	var ListManager = function() {
-		this._listNoteContent = [];
-		this._wrapper = document.querySelector('#note-list-wrapper');
+		/** @private */ this._listNoteContent = [];
+		/** @private */ this._wrapper = document.querySelector('#note-list-wrapper');
 		document.addEventListener('DOMContentLoaded', this.start.bind(this));
 	}
 
 	ListManager.prototype = {
+
+		/** Initialize the listManager. */
 		start() {
 			this.fetchList()
 				.then(this.updateList.bind(this))
@@ -18,6 +26,11 @@
 			window.addEventListener('click', this.onNoteOpen.bind(this));
 		},
 
+		/**
+    * Get List form localhost
+    *
+    * @return {Promise} A start point of the work flow.
+    */
 		fetchList(afterFetch) {
 			return  new Promise(function(resolve, reject) {
 				var req = new XMLHttpRequest();
@@ -34,10 +47,12 @@
 			});
 		},
 
+    /** Update the list */
 		updateList(list) {
 			this._listNoteContent = list;
 		},
 
+		/** Append all list title */
 		drawList() {
 			var list = this._listNoteContent;
 			var ul = document.createElement('ul');
@@ -48,6 +63,7 @@
 			this._wrapper.appendChild(ul);
 		},
 
+		/** Show first note before user do anything. */
 		preloadFirstNote() {
 			if (this._listNoteContent.length !== 0) {
 				var content = this._listNoteContent[0];
@@ -56,6 +72,12 @@
 			}
 		},
 
+    /**
+    * Trigger 'note-open' event while note opened
+    *
+    * @this {ListManager}
+    * @param {object} event The information such as event source, which is about event.
+    */
 		onNoteOpen(event) {
 			if (event.target.classList.contains('note-title')) {
 				var id = event.target.dataset.noteId;
@@ -67,9 +89,6 @@
 	}
 	exports.ListManager = ListManager;
 })(window);
-
-function sendXHR(url) {
-}
 
 function insertItem(element, index) {
 	var li = document.createElement('li');

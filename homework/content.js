@@ -1,25 +1,37 @@
 'use strict';
 (function(exports){
+
+
+  /**
+  * Create a instance of contentManager.
+  *
+  * @constructor
+  */
 	var ContentManager = function() {
-		this._wrapper = document.querySelector('#note-content-wrapper');
+		/** @private */ this._wrapper = document.querySelector('#note-content-wrapper');
 		document.addEventListener('DOMContentLoaded', this.start.bind(this));
 	}
 
 	ContentManager.prototype = {
+
+    /** Initialization */
 		start() {
 			window.addEventListener('note-open', this.updateContent.bind(this));
 		},
 
+		/** Update note wrapper's content */
 		updateContent(event) {
 			var note = event.detail;
 			this.resetWrapper();
 			this.drawNote(note);
 		},
 
+		/** Clear the note wrapper */
 		resetWrapper() {
 			this._wrapper.innerHTML = '';
 		},
 
+		/** set content on wrapper */
 		drawNote(note) {
 			var title = note.title;
 			var h = document.createElement('h2');
