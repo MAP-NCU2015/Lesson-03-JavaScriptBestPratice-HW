@@ -8,21 +8,30 @@
 
 	ListManager.prototype = {
 		start() {
-			this.fetchList(this.afterFetch.bind(this));
+			this.fetchList()
+				.then(this.updateList.bind(this))
+				.then(this.drawList.bind(this))
+				.then(this.preloadFirstNote.bind(this))
+				.catch(function(error) {
+					console.error(error);
+				});
 			window.addEventListener('click', this.onNoteOpen.bind(this));
 		},
+
 		fetchList(afterFetch) {
-			var url = 'http://127.0.0.1:8000/demo-list-notes.json';
-			sendXHR(url).then( function onFulfilled(value) {
-				afterFetch(value);
-			}).catch( function onRejected(error) {
-				console.error(error);
-			})
-		},
-		afterFetch(data) {
-			this.updateList(data);
-			this.drawList();
-			this.preloadFirstNote();
+			return  new Promise(function(resolve, reject) {
+				var req = new XMLHttpRequest();
+				req.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
+				req.responseType = 'json';
+				req.onload = function () {
+					if (req.status === 200 )
+						resolve(req.response);
+				};
+				req.onerror = function () {
+					reject( new Error(req.statusText));
+				};
+				req.send();
+			});
 		},
 
 		updateList(list) {
@@ -60,19 +69,6 @@
 })(window);
 
 function sendXHR(url) {
-	return  new Promise(function(resolve, reject) {
-		var req = new XMLHttpRequest();
-		req.open('GET', url, true);
-		req.responseType = 'json';
-		req.onload = function () {
-			if (req.status === 200 )
-				resolve(req.response);
-		};
-		req.onerror = function () {
-			reject( new Error(req.statusText));
-		};
-		req.send();
-	});
 }
 
 function insertItem(element, index) {
