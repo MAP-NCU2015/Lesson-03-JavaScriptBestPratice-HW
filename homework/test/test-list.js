@@ -1,8 +1,12 @@
-describe('Test > ', function() {
-  beforeEach(function() {
-  });
+var assert = require('assert');
+var Test = function(){};
+Test.prototype.sub = function (num1,num2){
+	return num1-num2;
+}
 
-  it('will test some pure functions', function() {
-    // Write any pure function assertion here.
-  });
-});
+  describe('sub', function(){
+    it('sub', function(){
+	  var test = new Test();
+      assert.equal('1', test.sub(2, 1));
+    })
+  })
