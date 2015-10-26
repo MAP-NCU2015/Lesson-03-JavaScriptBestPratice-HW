@@ -1,8 +1,35 @@
+'use strict';
 describe('Test > ', function() {
-  beforeEach(function() {
+    var toDoList, toDoItemReader;
+    beforeEach(function() {
+	toDoList = new ToDoList();
+	toDoItemReader = new ToDoItemReader();
+	toDoList._wrapper = document.createElement('div');
+	toDoItemReader._wrapper = document.createElement('div');
   });
 
   it('will test some pure functions', function() {
-    // Write any pure function assertion here.
-  });
+      toDoItemReader.start();
+      toDoList._listNoteContent[0] = {
+	  title: "This is an pen",
+	  passages: [
+	      "This is a pencil",
+	      "That is a book"
+	  ]
+      };
+      var onNoteOpenEvent = {
+	  target: {
+	      dataset: {
+		  noteId: 0,
+	      },
+	      classList: {
+		  contains: function(input){
+		      return true;
+		  }
+	      }
+	  }
+      }
+      toDoList.onNoteOpen(onNoteOpenEvent);
+      assert.isNotNull(toDoItemReader._wrapper);
+  }.bind(this));
 });
