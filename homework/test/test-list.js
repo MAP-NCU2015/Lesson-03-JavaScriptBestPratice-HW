@@ -1,3 +1,4 @@
+var assert = require('assert');
 var Test = function(){};
 Test.prototype.sub = function (num1,num2){
 	return num1-num2;
