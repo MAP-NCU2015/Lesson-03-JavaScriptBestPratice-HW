@@ -1,15 +1,11 @@
- var test = require('unit.js');
-	describe('Test > ', function() {
-	  beforeEach(function() {
-	  });
+var Test = function(){};
+Test.prototype.sub = function (num1,num2){
+	return num1-num2;
+}
 
-	  it('will test some pure functions', function() {
-        var example = 'hello world';
-		var x = 5;
-		var y = 2;
-        test
-          .string(example)
-            .contains('hello')
-        ;
-      });
-    });
+  describe('sub', function(){
+    it('sub', function(){
+	  var test = new Test();
+      assert.equal('1', test.sub(2, 1));
+    })
+  })
