@@ -1,37 +1,43 @@
 'use strict';
 
-(function() {
-  var _wrapper = document.querySelector('#note-content-wrapper');
+(function(exports) {
 
-  function start() {
-    window.addEventListener('note-open', (function(event) {
-      var note = event.detail;
-      resetWrapper();
-      drawNote(note);
-    }).bind(this));
+  var NoteContentManager = function() {
+    this._wrapper = document.querySelector('#note-content-wrapper');
   }
+  
+  NoteContentManager.prototype = {
 
-  function resetWrapper() {
-    _wrapper.innerHTML = '';
-  }
+    start() {
+      window.addEventListener('note-open', (function(event) {
+        var note = event.detail;
+        this.resetWrapper();
+        this.drawNote(note);
+      }).bind(this));
+    },
 
-  function drawNote(note) {
-    var title = note.title;
-    var h = document.createElement('h2');
-    h.textContent = title;
-    var passages = note.passages;
-    var buff = document.createDocumentFragment();
-    passages.forEach(function(passage) {
-      var p = document.createElement('p');
-      p.classList.add('note-passage');
-      p.textContent = passage;
-      buff.appendChild(p);
-    });
-    _wrapper.appendChild(h);
-    _wrapper.appendChild(buff);
-  }
+    resetWrapper() {
+      this._wrapper.innerHTML = '';
+    },
 
-  document.addEventListener('DOMContentLoaded', (function(event) {
-    start();
-  }).bind(this));
-})();
+    drawNote(note) {
+      var title = note.title;
+      var h = document.createElement('h2');
+      h.textContent = title;
+      var passages = note.passages;
+      var buff = document.createDocumentFragment();
+      passages.forEach(function(passage) {
+        var p = document.createElement('p');
+        p.classList.add('note-passage');
+        p.textContent = passage;
+        buff.appendChild(p);
+      });
+      this._wrapper.appendChild(h);
+      this._wrapper.appendChild(buff);
+    }
+
+  };
+
+  exports.NoteContentManager = NoteContentManager;
+  
+})(window);
