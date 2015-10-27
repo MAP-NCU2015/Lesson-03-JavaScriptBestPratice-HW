@@ -3,8 +3,8 @@
 (function(exports) {
 
   var NoteListManager = function() {
-    var this._listNoteContent = [];
-    var this._wrapper = document.querySelector('#note-list-wrapper');
+    this._listNoteContent = [];
+    this._wrapper = document.querySelector('#note-list-wrapper');
   };
 
   NoteListManager.prototype = {
@@ -61,7 +61,7 @@
       this._wrapper.appendChild(ul);
     },
 
-    fetchList(afterFetch) {
+    fetchList() {
       return new Promise((function(resolve , reject) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
@@ -71,14 +71,16 @@
           if (this.readyState === 4 && this.status === 200) {
             var listData = this.response;
             // The flow ends here.
-            afterFetch(listData);
+            resolve(listData);
           } else if (this.status !== 200 ){
             // Ignore error in this case.
+            reject(xhr);
           }
         };
         xhr.send(); 
       }).bind(this));
-  };
+    }
+  }
 
   exports.NoteListManager = NoteListManager;
 
