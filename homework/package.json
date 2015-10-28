@@ -15,7 +15,7 @@
     "sinon": "^1.17.1"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "./node_modules/karma/bin/karma start"
   },
   "author": "",
   "license": "ISC"
