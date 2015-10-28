@@ -1,37 +1,68 @@
 'use strict';
 
-(function() {
-  var _wrapper = document.querySelector('#note-content-wrapper');
+/**
+ * @typedef {Object} Note
+ * @property {String} title
+ * @property {String} passages
+ */
 
-  function start() {
-    window.addEventListener('note-open', function(event) {
+(function(exports) {
+
+  /**
+   * Create a instance of ContentManager
+   *
+   * @constructor
+   * @this {ContentManager}
+   */
+  var ContentManager = function () {
+    this._wrapper = document.querySelector('#note-content-wrapper');
+  }
+
+  /**
+   * Add an event handler for note-open event which draw correct note contents
+   *
+   * @this {ContentManager}
+   */
+  ContentManager.prototype.start = function () {
+    window.addEventListener('note-open', (function(event) {
       var note = event.detail;
-      resetWrapper();
-      drawNote(note);
-    });
+      this.resetWrapper();
+      this.drawNote(note);
+    }).bind(this));
   }
 
-  function resetWrapper() {
-    _wrapper.innerHTML = '';
+  /**
+   * Clear the content(HTML) in _wrapper
+   *
+   * @this {ContentManager}
+   */
+  ContentManager.prototype.resetWrapper = function () {
+    this._wrapper.innerHTML = '';
   }
 
-  function drawNote(note) {
+  /**
+   * Draw the given note in the content wrapper
+   *
+   * @this   {ContentManager}
+   * @param  {Note} Note to draw
+   */
+  ContentManager.prototype.drawNote = function (note) {
     var title = note.title;
     var h = document.createElement('h2');
     h.textContent = title;
     var passages = note.passages;
     var buff = document.createDocumentFragment();
-    passages.forEach(function(passage) {
+
+    for (var i = 0; i < passages.length; i += 1) {
       var p = document.createElement('p');
       p.classList.add('note-passage');
-      p.textContent = passage;
+      p.textContent = passages[i];
       buff.appendChild(p);
-    });
-    _wrapper.appendChild(h);
-    _wrapper.appendChild(buff);
+    }
+
+    this._wrapper.appendChild(h);
+    this._wrapper.appendChild(buff);
   }
 
-  document.addEventListener('DOMContentLoaded', function(event) {
-    start();
-  });
-})();
+  exports.ContentManager = ContentManager;
+})(window);
