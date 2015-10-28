@@ -1,8 +1,13 @@
-describe('Test > ', function() {
-  beforeEach(function() {
-  });
+describe('Test Math.sin', function() {
+	var subject;
+	
+	beforeEach(function() {
+		subject = new TestManager;
+	});
 
-  it('will test some pure functions', function() {
-    // Write any pure function assertion here.
+  it('will test sin function', function() {
+    subject.set(Math.PI);
+	assertEqual(subject.sin(),0);
+	done();
   });
 });
