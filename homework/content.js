@@ -4,11 +4,11 @@
   var _wrapper = document.querySelector('#note-content-wrapper');
 
   function start() {
-    window.addEventListener('note-open', function(event) {
+    window.addEventListener('note-open', (function(event) {
       var note = event.detail;
       resetWrapper();
       drawNote(note);
-    });
+    }).bind(this));
   }
 
   function resetWrapper() {
@@ -33,5 +33,5 @@
 
   document.addEventListener('DOMContentLoaded', function(event) {
     start();
-  });
+  }).bind(this));
 })();

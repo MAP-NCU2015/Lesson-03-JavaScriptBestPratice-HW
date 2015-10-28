@@ -6,14 +6,14 @@
   var _wrapper = document.querySelector('#note-list-wrapper');
 
   function start() {
-    fetchList(function(data) {
+    fetchList((function(data) {
       updateList(data);
       drawList();
       preloadFirstNote();
-    });
-    window.addEventListener('click', function(event) {
+    }).bind(this));
+    window.addEventListener('click', (function(event) {
       onNoteOpen(event);
-    });
+    }).bind(this));
   }
 
   function onNoteOpen(event) {
@@ -59,21 +59,21 @@
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
     xhr.responseType = 'json';
-    xhr.onreadystatechange = function(e) {
+    xhr.onreadystatechange = (function(e) {
       // Watch out: we have a mysterious unknown 'this'.
-      if (this.readyState === 4 && this.status === 200) {
-        var listData = this.response;
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var listData = xhr.response;
         // The flow ends here.
         afterFetch(listData);
-      } else if (this.status !== 200 ){
+      } else if (xhr.status !== 200 ){
         // Ignore error in this case.
       }
-    };
+    }).bind(this));
     xhr.send();
   }
 
-  document.addEventListener('DOMContentLoaded', function(event) {
+  document.addEventListener('DOMContentLoaded', (function(event) {
     start();
-  });
+  }).bind(this));
 
 })();
