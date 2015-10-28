@@ -88,15 +88,17 @@
     var ul = document.createElement('ul');
     ul.id = 'note-title-list';
     var buff = document.createDocumentFragment();
-    list.forEach(function(note, i) {
+
+    for (var i = 0; i < list.length; i += 1) {
       var li = document.createElement('li');
       li.dataset.noteId = i;
       li.classList.add('note-title');
-      li.textContent = note.title;
+      li.textContent = list[i].title;
       // Note: buff is captured, so we now have a
       // little closure naturally.
       buff.appendChild(li);
-    });
+    }
+
     ul.appendChild(buff);
     this._wrapper.appendChild(ul);
   },

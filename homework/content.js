@@ -52,12 +52,14 @@
     h.textContent = title;
     var passages = note.passages;
     var buff = document.createDocumentFragment();
-    passages.forEach(function(passage) {
+
+    for (var i = 0; i < passages.length; i += 1) {
       var p = document.createElement('p');
       p.classList.add('note-passage');
-      p.textContent = passage;
+      p.textContent = passages[i];
       buff.appendChild(p);
-    });
+    }
+
     this._wrapper.appendChild(h);
     this._wrapper.appendChild(buff);
   }
