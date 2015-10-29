@@ -18,6 +18,10 @@
         li.onNoteOpen(event);
       }).bind(this));
   }
+  
+  list.prototype.add = function(num1, num2){
+	return num1 + num2;
+  }
 
   list.prototype.onNoteOpen = function(event) {
     if (event.target.classList.contains('note-title')) {
@@ -82,5 +86,6 @@
   document.addEventListener('DOMContentLoaded', function(event) {
     start();
   });
+  module.exports.add = add;
 
 })();
