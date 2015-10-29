@@ -9,6 +9,6 @@ describe('Test > ', function() {
     sub._wrapper = document.createElement('p');
     sub._wrapper.innerHTML = "G_G";
     sub.resetWrapper();
-    assert.equal(subject._wrapper.innerHTML , "" ,"Fail！")
+    assert.equal(sub._wrapper.innerHTML , "" ,"Fail！")
   });
 });
