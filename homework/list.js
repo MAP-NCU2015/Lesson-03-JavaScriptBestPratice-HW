@@ -1,79 +1,99 @@
 'use strict';
+(function(exports) {
 
-(function() {
+  /**
+  * Create a instance of the ListManager.
+  *
+  * @constructor
+  */
+	var ListManager = function() {
+		/** @private */ this._listNoteContent = [];
+		/** @private */ this._wrapper = document.querySelector('#note-list-wrapper');
+		document.addEventListener('DOMContentLoaded', this.start.bind(this));
+	}
 
-  var _listNoteContent = [];
-  var _wrapper = document.querySelector('#note-list-wrapper');
+	ListManager.prototype = {
 
-  function start() {
-    fetchList(function(data) {
-      updateList(data);
-      drawList();
-      preloadFirstNote();
-    });
-    window.addEventListener('click', function(event) {
-      onNoteOpen(event);
-    });
-  }
+		/** Initialize the listManager. */
+		start() {
+			this.fetchList()
+				.then(this.updateList.bind(this))
+				.then(this.drawList.bind(this))
+				.then(this.preloadFirstNote.bind(this))
+				.catch(function(error) {
+					console.error(error);
+				});
+			window.addEventListener('click', this.onNoteOpen.bind(this));
+		},
 
-  function onNoteOpen(event) {
-    if (event.target.classList.contains('note-title')) {
-      var id = event.target.dataset.noteId;
-      var content = _listNoteContent[id];
-      window.dispatchEvent(new CustomEvent('note-open',
-        { detail: content }));
-    };
-  }
+		/**
+    * Get List form localhost
+    *
+    * @return {Promise} A start point of the work flow.
+    */
+		fetchList(afterFetch) {
+			return  new Promise(function(resolve, reject) {
+				var req = new XMLHttpRequest();
+				req.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
+				req.responseType = 'json';
+				req.onload = function () {
+					if (req.status === 200 )
+						resolve(req.response);
+				};
+				req.onerror = function () {
+					reject( new Error(req.statusText));
+				};
+				req.send();
+			});
+		},
 
-  function preloadFirstNote() {
-    if (_listNoteContent.length !== 0) {
-      var content = _listNoteContent[0];
-      window.dispatchEvent(new CustomEvent('note-open',
-        { detail: content }));
-    }
-  }
+    /** Update the list */
+		updateList(list) {
+			this._listNoteContent = list;
+		},
 
-  function updateList(list) {
-    _listNoteContent = list;
-  }
+		/** Append all list title */
+		drawList() {
+			var list = this._listNoteContent;
+			var ul = document.createElement('ul');
+			ul.id = 'note-title-list';
+			var buff = document.createDocumentFragment();
+			list.forEach(insertItem.bind(buff));
+			ul.appendChild(buff);
+			this._wrapper.appendChild(ul);
+		},
 
-  function drawList() {
-    var list = _listNoteContent;
-    var ul = document.createElement('ul');
-    ul.id = 'note-title-list';
-    var buff = document.createDocumentFragment();
-    list.forEach(function(note, i) {
-      var li = document.createElement('li');
-      li.dataset.noteId = i;
-      li.classList.add('note-title');
-      li.textContent = note.title;
-      // Note: buff is captured, so we now have a
-      // little closure naturally.
-      buff.appendChild(li);
-    });
-    ul.appendChild(buff);
-    _wrapper.appendChild(ul);
-  }
+		/** Show first note before user do anything. */
+		preloadFirstNote() {
+			if (this._listNoteContent.length !== 0) {
+				var content = this._listNoteContent[0];
+				window.dispatchEvent(new CustomEvent('note-open',
+					{ detail: content }));
+			}
+		},
 
-  function fetchList(afterFetch) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
-    xhr.responseType = 'json';
-    xhr.onreadystatechange = function(e) {
-      // Watch out: we have a mysterious unknown 'this'.
-      if (this.readyState === 4 && this.status === 200) {
-        var listData = this.response;
-        // The flow ends here.
-        afterFetch(listData);
-      } else if (this.status !== 200 ){
-        // Ignore error in this case.
-      }
-    };
-    xhr.send();
-  }
+    /**
+    * Trigger 'note-open' event while note opened
+    *
+    * @this {ListManager}
+    * @param {object} event The information such as event source, which is about event.
+    */
+		onNoteOpen(event) {
+			if (event.target.classList.contains('note-title')) {
+				var id = event.target.dataset.noteId;
+				var content = this._listNoteContent[id];
+				window.dispatchEvent(new CustomEvent('note-open',
+					{ detail: content }));
+			};
+		}
+	}
+	exports.ListManager = ListManager;
+})(window);
 
-  document.addEventListener('DOMContentLoaded', function(event) {
-    start();
-  });
-
-})();
+function insertItem(element, index) {
+	var li = document.createElement('li');
+	li.dataset.noteId = index;
+	li.classList.add('note-title');
+	li.textContent = element.title;
+	this.appendChild(li);
+}
