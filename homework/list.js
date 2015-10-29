@@ -9,11 +9,12 @@
   
   ToDoListManager.prototype = {
     start(){
-      this.fetchList((function(data) {
+      this.fetchList()
+      .then((function(data) {
         this.updateList(data);
         this.drawList();
         this.preloadFirstNote();
-      }).bind(this))
+      }).bind(this));
       window.addEventListener('click', (function(event) {
         this.onNoteOpen(event);
       }).bind(this));
@@ -59,23 +60,26 @@
     },
 
     fetchList(afterFetch) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
-    xhr.responseType = 'json';
-    xhr.onreadystatechange = (function(e) {
-      // Watch out: we have a mysterious unknown 'this'.
-      if (this.readyState === 4 && this.status === 200) {
-        var listData = this.response;
-        // The flow ends here.
-        afterFetch(listData);
-      } else if (this.status !== 200 ){
-        // Ignore error in this case.
-      }
-    }).bind(this);
-    xhr.send();
+      return new Promise((function(resolve , reject){
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
+        xhr.responseType = 'json';
+        xhr.onreadystatechange = (function(e) {
+          // Watch out: we have a mysterious unknown 'this'.
+          if (this.readyState === 4 && this.status === 200) {
+            var listData = this.response;
+            // The flow ends here.
+            resolve(listData);
+          } else if (this.status !== 200 ){
+            // Ignore error in this case.
+            reject('Error!');
+          }
+        };
+        xhr.send();
+      }).bind(this));
     }
     
   };
 
   exports.ToDoListManager = ToDoListManager;
-})();
+})(window);
