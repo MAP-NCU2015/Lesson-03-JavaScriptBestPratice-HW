@@ -16,10 +16,10 @@
     window.addEventListener('click', 
 	  (function(event) {
         li.onNoteOpen(event);
-      }).bind(this));
+      }).bind(this));//Bind this
   }
   
-  list.prototype.add = function(num1, num2){
+  list.prototype.add = function(num1, num2){//test
 	return num1 + num2;
   }
 
@@ -63,7 +63,7 @@
   }
 
   list.prototype.fetchList = function(afterfetch) {
-    return new Promise((function(resolve, reject) {
+    return new Promise((function(resolve, reject) {//use Promise
 		var xhr = new XMLHttpRequest();
 		xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
 		xhr.responseType = 'json';
