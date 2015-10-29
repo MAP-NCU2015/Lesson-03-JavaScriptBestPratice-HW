@@ -1,8 +1,13 @@
-describe('Test > ', function() {
-  beforeEach(function() {
-  });
+var assert = require('assert');
+var Test = function(){};
 
-  it('will test some pure functions', function() {
-    // Write any pure function assertion here.
-  });
-});
+Test.prototype.add = function (n1,n2){
+	return n1+n2;
+}
+
+  describe('add', function(){
+    it('add', function(){
+	  var test = new Test();
+      assert.equal('10', test.add(7, 3));
+    })
+  })
