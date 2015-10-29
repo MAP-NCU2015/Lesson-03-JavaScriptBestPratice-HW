@@ -4,7 +4,7 @@
   
   var ToDoContentManager = function () {
       this._wrapper = null;  
-  }
+  };
   ToDoContentManager.prototype = {
     start(){
         /*
