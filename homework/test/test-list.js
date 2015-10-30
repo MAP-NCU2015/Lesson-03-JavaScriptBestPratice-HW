@@ -1,8 +1,11 @@
-describe('Test > ', function() {
-  beforeEach(function() {
+describe('Test Math', function () {
+    var testAdd;
+    beforeEach(function () {
+        testAdd = new Content();
   });
 
-  it('will test some pure functions', function() {
-    // Write any pure function assertion here.
+  it('can test addition', function() {
+      var sum = testAdd.addition(5, 5);
+      assert.equal(sum, 5 + 5);
   });
 });
