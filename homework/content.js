@@ -10,7 +10,7 @@
 TodoContentManager.prototype = {
   
   start() {
-    window.addEventListener('note-open', function(event) {
+    window.addEventListener(('note-open', function(event) {
       var note = event.detail;
       resetWrapper();
       drawNote(note);
