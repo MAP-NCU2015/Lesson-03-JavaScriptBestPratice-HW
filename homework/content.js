@@ -14,7 +14,7 @@ TodoContentManager.prototype = {
       var note = event.detail;
       resetWrapper();
       drawNote(note);
-    }).bind(this);
+    }).bind(this));
   },
 
   resetWrapper() {
