@@ -1,11 +1,15 @@
 'use strict';
 
-(function() {
-
-  var _listNoteContent = [];
-  var _wrapper = document.querySelector('#note-list-wrapper');
-
-  function start() {
+(function(exports) {
+  
+  var TodoListManager = function() {
+    this._listNoteContent = [];
+    this._wrapper = document.querySelector('#note-list-wrapper');
+  };
+  
+TodoListManager.prototype = {
+  
+  start() {
     fetchList(function(data) {
       updateList(data);
       drawList();
@@ -14,9 +18,9 @@
     window.addEventListener('click', function(event) {
       onNoteOpen(event);
     });
-  }
+  },
 
-  function onNoteOpen(event) {
+  onNoteOpen(event) {
     if (event.target.classList.contains('note-title')) {
       var id = event.target.dataset.noteId;
       var content = _listNoteContent[id];
@@ -25,19 +29,19 @@
     };
   }
 
-  function preloadFirstNote() {
+  preloadFirstNote() {
     if (_listNoteContent.length !== 0) {
       var content = _listNoteContent[0];
       window.dispatchEvent(new CustomEvent('note-open',
         { detail: content }));
     }
-  }
+  },
 
-  function updateList(list) {
+  updateList(list) {
     _listNoteContent = list;
-  }
+  },
 
-  function drawList() {
+  drawList() {
     var list = _listNoteContent;
     var ul = document.createElement('ul');
     ul.id = 'note-title-list';
@@ -53,9 +57,9 @@
     });
     ul.appendChild(buff);
     _wrapper.appendChild(ul);
-  }
+  },
 
-  function fetchList(afterFetch) {
+  fetchList(afterFetch) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
     xhr.responseType = 'json';
@@ -71,9 +75,7 @@
     };
     xhr.send();
   }
+}
 
-  document.addEventListener('DOMContentLoaded', function(event) {
-    start();
-  });
-
-})();
+exports.TodoListManager = TodoListManager;
+})(window);
