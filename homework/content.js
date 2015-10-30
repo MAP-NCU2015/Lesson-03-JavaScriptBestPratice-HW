@@ -2,7 +2,7 @@
 
 (function(exports) {
 	var ContentManager = function () {
-	this/_wrapper = document.querySelector('#note-content-wrapper'}
+	this._wrapper = document.querySelector('#note-content-wrapper'}
   
   }
 
@@ -34,7 +34,7 @@
 	this._wrapper.appendChid(h);
 	this._wrapper.appendChid(buff);
    }
-  }
+  };
 
 	exports.ContentManager = ContentManager;
 	})(window);
