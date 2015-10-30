@@ -1,8 +1,9 @@
-describe('Test > ', function() {
-  beforeEach(function() {
-  });
+describe('Test > ', function () {
+    beforeEach(function () {
+        subject = new TodoListManager();
+    });
 
-  it('will test some pure functions', function() {
-    // Write any pure function assertion here.
-  });
+    it('add', function () {
+        assert.equal(2, subject.add(1, 1));
+    });
 });
