@@ -1,23 +1,26 @@
 'use strict';
 
-(function() {
+var ContentManager =(function() {
 
-  var ContentManager = function () {
-    var _wrapper = document.querySelector('#note-content-wrapper'); 
-  }
+  // constructor
+  var self = function () {
+    this._wrapper = null; 
+  };
  
-  ContentManager.prototype = {
+  // prototype
+  self.prototype = {
 
     start() {
-      window.addEventListener('note-open', function(event) {
+      this._wrapper = document.querySelector('#note-content-wrapper');
+      window.addEventListener('note-open', (function(event) {
         var note = event.detail;
-        resetWrapper();
-        drawNote(note);
-      });
+        this.resetWrapper();
+        this.drawNote(note);
+      }).bind(this));
     },
 
     resetWrapper() {
-      _wrapper.innerHTML = '';
+      this._wrapper.innerHTML = '';
     },
 
     drawNote(note) {
@@ -32,13 +35,10 @@
         p.textContent = passage;
         buff.appendChild(p);
       });
-      _wrapper.appendChild(h);
-      _wrapper.appendChild(buff);
-    },
+      this._wrapper.appendChild(h);
+      this._wrapper.appendChild(buff);
+    }
 
-    document.addEventListener('DOMContentLoaded', function(event) {
-      start();
-    });
-
-  }
+  };
+  return self;
 })(window);
