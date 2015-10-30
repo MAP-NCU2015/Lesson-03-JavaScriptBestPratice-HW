@@ -3,6 +3,6 @@ describe('Test > ', function() {
   });
 
   it('will test some pure functions', function() {
-    // Write any pure function assertion here.
+    assert.equal('3',Math.abs(-3));
   });
 });
