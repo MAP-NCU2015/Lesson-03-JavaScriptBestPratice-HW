@@ -3,8 +3,6 @@
 (function(exports) {
   
   var TodoContentManager = function() {
-  // Local data storage; should sync up with the server.
-  this._listTodoItem = [];
   // Will be an element as the list wrapper.
   this._wrapper = document.querySelector('#note-content-wrapper');
 };
@@ -41,5 +39,5 @@ TodoContentManager.prototype = {
 };
 
   
-  exports.TodoContentManager = TodoListManager;
+  exports.TodoContentManager = TodoContentManager;
 })(window);
