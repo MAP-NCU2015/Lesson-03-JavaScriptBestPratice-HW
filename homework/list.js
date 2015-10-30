@@ -87,6 +87,12 @@ var ListManager = (function() {
         }).bind(xhr));
         xhr.send();
       });
+    },
+
+    // test function here
+    // test num1 add num2
+    testFunction(num1, num2) {
+      return num1 + num2;
     }
   };
   return self ;
