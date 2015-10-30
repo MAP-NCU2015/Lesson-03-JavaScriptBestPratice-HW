@@ -14,7 +14,8 @@ var ListManager = (function() {
     start() {
 
       this._wrapper = document.querySelector('#note-list-wrapper');
-      this.fetchList(this.handler.bind(this));
+      this.fetchList()
+      .then(this.handler.bind(this));
 
       window.addEventListener('click', (function(event) {
         this.onNoteOpen(event);
@@ -67,22 +68,26 @@ var ListManager = (function() {
     },
 
     fetchList(afterFetch) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
-      xhr.responseType = 'json';
-      xhr.onreadystatechange = (function(e) {
-        // Watch out: we have a mysterious unknown 'this'.
-        if (this.readyState === 4 && this.status === 200) {
-          var listData = this.response;
-          // The flow ends here.
-          afterFetch(listData);
-        } else if (this.status !== 200 ){
-          // Ignore error in this case.
-        }
-      }).bind(xhr);
-      xhr.send();
+      return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        var url = 'http://127.0.0.1:8000/demo-list-notes.json';
+        xhr.open('GET', url, true);
+        xhr.responseType = 'json';
+        xhr.onreadystatechange = ((function(e) {
+          // Watch out: we have a mysterious unknown 'this'.
+          // here "this" is a xmlhttprequest = xhr -> so bind xhr
+          if (this.readyState === 4 && this.status === 200) {
+            var listData = this.response;
+            // The flow ends here.
+            resolve(listData);
+          } else if (this.status !== 200 ){
+            // Ignore error in this case.
+            reject("Error");
+          }
+        }).bind(xhr));
+        xhr.send();
+      });
     }
-
   };
   return self ;
 
