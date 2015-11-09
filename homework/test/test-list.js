@@ -29,7 +29,8 @@ describe('Test > ', function() {
 	      }
 	  }
       }
-      toDoList.onNoteOpen(onNoteOpenEvent);
-      assert.isNotNull(toDoItemReader._wrapper);
+      toDoItemReader._wrapper.innerHTML = "";
+      toDoList.handleEvent(onNoteOpenEvent);
+      assert.notEqual(toDoItemReader._wrapper.innerHTML, "");
   }.bind(this));
 });

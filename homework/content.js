@@ -5,11 +5,7 @@ function ToDoItemReader() {
 }
 ToDoItemReader.prototype = {
     start: function() {
-	window.addEventListener('note-open', function(event) {
-	    var note = event.detail;
-	    this.resetWrapper();
-	    this.drawNote(note);
-	}.bind(this));
+	window.addEventListener('note-open', this);
     },
 
     resetWrapper: function() {
@@ -30,6 +26,12 @@ ToDoItemReader.prototype = {
 	}.bind(this));
 	this._wrapper.appendChild(h);
 	this._wrapper.appendChild(buff);
+    },
+
+    handleEvent: function(event) {
+	var note = event.detail;
+	this.resetWrapper();
+	this.drawNote(note);
     }
 }
 document.addEventListener('DOMContentLoaded', function(event) {

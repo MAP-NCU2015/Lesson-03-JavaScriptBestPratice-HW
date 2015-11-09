@@ -4,32 +4,28 @@ function ToDoList(){
     this._wrapper = document.querySelector('#note-list-wrapper');
 }
 ToDoList.prototype = {
-    start: function() {
-	this.fetchList(function(data) {
-	    this.updateList(data);
-	    this.drawList();
-	    this.preloadFirstNote();
-	}.bind(this));
-	window.addEventListener('click', function(event) {
-	    this.onNoteOpen(event);
-	}.bind(this));
+    start: function(){
+	var promise = this.fetchList();
+	promise.then(
+	    (data) => {
+		this.updateList(data);
+		this.drawList();
+		if (this._listNoteContent.length !== 0){
+		    this.preloadFirstNote();
+		}
+	    });
+	promise.catch(
+	    (reason) => {
+		throw reason;
+	    }
+	);
+	window.addEventListener('click',this);
     },
-
-    onNoteOpen: function(event) {
-	if (event.target.classList.contains('note-title')) {
-	    var id = event.target.dataset.noteId;
-	    var content = this._listNoteContent[id];
-	    window.dispatchEvent(new CustomEvent('note-open',
-						 { detail: content }));
-	};
-    },
-
+    
     preloadFirstNote: function() {
-	if (this._listNoteContent.length !== 0) {
 	    var content = this._listNoteContent[0];
 	    window.dispatchEvent(new CustomEvent('note-open',
 						 { detail: content }));
-	}
     },
 
     updateList: function(list) {
@@ -54,27 +50,31 @@ ToDoList.prototype = {
 	this._wrapper.appendChild(ul);
     },
 
-    fetchList: function(afterFetch) {
-	var xhr = new XMLHttpRequest();
-	new Promise(function(resolve, reject){
+    fetchList: function() {
+	return new Promise(function(resolve, reject){
+	    var xhr = new XMLHttpRequest();
 	    xhr.open('GET', '/demo-list-notes.json', true);
 	    xhr.responseType = 'json';
 	    xhr.onreadystatechange = function(e) {
 		// Watch out: we have a mysterious unknown 'this'.
 		if (this.readyState === 4 && this.status === 200) {
 		    // The flow ends here.
-		    resolve();
+		    resolve(this.response);
 		} else if (this.status !== 200 ){
 		    // Ignore error in this case.
-		    reject();
+		    reject('Status Error: '+this.status);
 		}
 	    };
 	    xhr.send();
-	}).then(function(){
-	    afterFetch(xhr.response);
-	}).catch(function(){
-	    console.log("fetchList failed.")
-	})
+	});
+    },
+
+    handleEvent: function(event){
+	if (event.target.classList.contains('note-title')) {
+	    var id = event.target.dataset.noteId;
+	    var content = this._listNoteContent[id];
+	    window.dispatchEvent(new CustomEvent('note-open',{ detail: content }));
+	};
     }
 };
 document.addEventListener('DOMContentLoaded', function(event) {
