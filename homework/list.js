@@ -27,7 +27,7 @@ ListManager.prototype = {
   
   updateList(list) {
     this._listNoteContent = list;
-  }
+  },
  
   drawList() {
     var list = this._listNoteContent;
@@ -57,22 +57,21 @@ ListManager.prototype = {
           if (this.readyState === 4 && this.status === 200) {
             var listData = this.response;
             // The flow ends here.
-            afterFetch(listData);
+            resolve(listData);
           } else if (this.status !== 200 ){
             // Ignore error in this case.
           }
-    };
+    });
     xhr.send();
   });
   },
   
   start() {
-      this.fetchList().then((function(data){
-        this.updateList(data);
+      this.fetchList().then((function(response){
+        this.updateList(response);
         this.drawList();
         this.preloadFirstNote();
-      }).bind(this)).catch((function() {
-
+      }).bind(this)).catch((function(error) {
       }).bind(this));
       window.addEventListener('click', (function(event) {
         this.onNoteOpen(event);

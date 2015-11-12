@@ -8,13 +8,6 @@
   }
 
   ContentManager.prototype = {
-  start() {
-    window.addEventListener('note-open', (function(event) {
-      var note = event.detail;
-      this.resetWrapper();
-      this.drawNote(note);
-    }).bind(this));
-  },
   
   resetWrapper() {
     this._wrapper.innerHTML = '';
@@ -34,8 +27,22 @@
     });
     this._wrapper.appendChild(h);
     this._wrapper.appendChild(buff);
-  };
+  },
   
-  exports.ContentManger = ContentManger;
+  handleEvent(event) {
+    switch(event.type) {
+        case 'note-open':
+          var note = event.detail;
+          this.resetWrapper();
+          this.drawNote(note);
+        break;
+    }
+  },
+  
+  start() {
+    window.addEventListener('note-open', this);
+  }
+};
+  
+  exports.ContentManager = ContentManager;
   })(window);
-
