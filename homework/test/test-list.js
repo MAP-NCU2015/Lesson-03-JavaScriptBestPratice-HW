@@ -1,14 +1,11 @@
-describe('Test_sin > ', function() {
-  var subject;
+var assert = require('assert');
+var add = require('add.js')
 
-  beforeEach(function() {
-    subject = new TestManager;
-  });
-
-  it('will test the sin function', function(done) {
+describe('Test_add', function() {
+  it('will test add function', function(done) {
     // Write any pure function assertion here.
-	subject.set(0);
-    assert.Equal(subject.sin(), 0);
-    done();
+	it('add', function(){
+      assert.equal('2', add.add(1, 1));
+    })
   });
 });
