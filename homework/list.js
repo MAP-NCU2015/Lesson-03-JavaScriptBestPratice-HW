@@ -8,7 +8,7 @@ var ListManager = function() {
 };
 
 ListManager.prototype = {  
-  onNoteOpen(event) {
+  onClick(event) {
     if (event.target.classList.contains('note-title')) {
       var id = event.target.dataset.noteId;
       var content = this._listNoteContent[id];
@@ -18,11 +18,9 @@ ListManager.prototype = {
   },
  
    preloadFirstNote() {
-    if (this_listNoteContent.length !== 0) {
       var content = this_listNoteContent[0];
       window.dispatchEvent(new CustomEvent('note-open',
         { detail: content }));
-    }
   },
   
   updateList(list) {
@@ -68,13 +66,15 @@ ListManager.prototype = {
   
   start() {
       this.fetchList().then((function(response){
-        this.updateList(response);
-        this.drawList();
+      this.updateList(response);
+      this.drawList();
+	  if (this_listNoteContent.length !== 0){
         this.preloadFirstNote();
+	  }
       }).bind(this)).catch((function(error) {
       }).bind(this));
       window.addEventListener('click', (function(event) {
-        this.onNoteOpen(event);
+        this.onClick(event);
       }).bind(this));
     }
 };
